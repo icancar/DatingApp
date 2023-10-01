@@ -1,30 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
 using API.Entities;
-using Microsoft.AspNetCore.Http.Connections;
-using Microsoft.AspNetCore.Http.HttpResults;
+using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using SQLitePCL;
 
 namespace API.Controllers
 {
     public class AccountController : BaseApiController
     {
         public DataContext _context;
-        public AccountController(DataContext context) {
+        public ITokenService _tokenService { get; }
+        public AccountController(DataContext context, ITokenService tokenService) {
+            _tokenService = tokenService;
             _context = context;
+
         }
 
         [HttpPost("register")] //POST api/account/register
-        public async Task<ActionResult<AppUser>> Register(RegisterDTO registerDTO) {
+        public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO) {
 
             if (await UserExists(registerDTO.Username.ToLower())){
                 return BadRequest("Username is taken!");
@@ -41,7 +37,10 @@ namespace API.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             
-            return user;
+            return new UserDTO{
+                Username = user.UserName,
+                Token = _tokenService.CreateToken(user)
+            };
         }
 
         public async Task<bool> UserExists(string username) {
@@ -49,7 +48,7 @@ namespace API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<AppUser>> Login(LoginDTO loginDTO) {
+        public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO) {
             var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == loginDTO.username);
 
             if (user == null) {
@@ -66,7 +65,11 @@ namespace API.Controllers
                 }
             }
 
-            return user;
+            return new UserDTO 
+            {
+                Username = user.UserName,
+                Token = _tokenService.CreateToken(user)
+            };
 
         }
         
