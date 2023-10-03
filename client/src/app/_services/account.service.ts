@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class AccountService {
+export class AccountService { //instatiated when application is created and deleted when application is closed
 
   baseUrl  = 'https://localhost:5001/api/';
 
