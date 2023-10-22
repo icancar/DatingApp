@@ -34,4 +34,16 @@ export class AccountService { //instatiated when application is created and dele
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
   }
+
+  register(model: any){
+    return this.http.post<User>(this.baseUrl + 'account/register', model).pipe(
+      map(user => {
+        if(user) {
+          localStorage.setItem('user', JSON.stringify(user));
+          this.currentUserSource.next(user);
+        }
+        return user;
+      })
+    );
+  }
 }
