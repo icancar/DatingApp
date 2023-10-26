@@ -1,1 +1,17 @@
-<p>server-error works!</p>
+<h4>Internal server error - refreshing the page will make the error disappear!</h4>
+<ng-container *ngIf="error">
+    <h5 class="text-danger">
+        Error: {{error.message}}
+    </h5>
+    <p class="font-weight-bold">Note: If you are seeing this then angular is probably not to blame</p>
+    <p>What to do next?</p>
+    <ol>
+        <li>Check failing request in InspectElement of your browser (inside network tab)</li>
+        <li>Examine URL - what API endpoint are you requesting?</li>
+        <li>Reproduce the problem in PostMan!!! If we get same error Angular is 100% not a problem</li>
+    </ol>
+    <p style="font-weight: bold;">Following stack trace - the first few lines will tell you what errors are:</p>
+    <code class="mt-5">
+        {{error.details}}
+    </code>
+</ng-container>
