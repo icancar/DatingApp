@@ -12,6 +12,7 @@ export class MembersService {
   constructor(private Http: HttpClient) { }
 
   getMembers() {
+    console.log(this.baseUrl);
     return this.Http.get<Member[]>(this.baseUrl + 'users', this.getHttpOptions());
   }
 
@@ -27,7 +28,7 @@ export class MembersService {
 
     return {
       headers: new HttpHeaders ({
-        Authorization : 'Bearer' + user.token
+        Authorization : 'Bearer ' + user.token
       })
     }
   }
