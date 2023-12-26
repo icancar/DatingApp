@@ -13,23 +13,11 @@ export class MembersService {
 
   getMembers() {
     console.log(this.baseUrl);
-    return this.Http.get<Member[]>(this.baseUrl + 'users', this.getHttpOptions());
+    return this.Http.get<Member[]>(this.baseUrl + 'users');
   }
 
   getMember(username:string) {
-    return this.Http.get<Member>(this.baseUrl + 'users/' + username, this.getHttpOptions())
+    return this.Http.get<Member>(this.baseUrl + 'users/' + username)
   }
 
-  getHttpOptions() {
-    const userString = localStorage.getItem('user');
-    if (!userString) return;
-
-    const user = JSON.parse(userString);
-
-    return {
-      headers: new HttpHeaders ({
-        Authorization : 'Bearer ' + user.token
-      })
-    }
-  }
 }
