@@ -41,8 +41,8 @@
                 <h4>Intrests</h4>
                 <p>{{member.intrests}}</p>
             </tab>
-            <tab heading="Photos">
-                <gallery [items]="images"></gallery>
+            <tab heading="Photos" #photoTab="tab">
+                <gallery *ngIf="photoTab.active" [items]="images" class="gallery"></gallery>
             </tab>
             <tab heading="Messages">
                 <p>Messages will go here</p>
